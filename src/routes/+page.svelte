@@ -45,6 +45,18 @@
                 getCocktails(), getNonAlcoholicCocktails(), getBeersOnTap(),
                 getBottledBeers(), getWines(), getSoftDrinks(), getHotDrinks()
             ]);
+
+              console.log("--- Menu Data Status ---");
+            console.log("Cocktails:", cocktails);
+            console.log("Non-Alcoholic Cocktails:", nonAlcoholicCocktails);
+            console.log("Beers on Tap:", beersOnTap);
+            console.log("Bottled Beers:", bottledBeers);
+            console.log("Wines:", wines);
+            console.log("Soft Drinks:", softDrinks); // <--- CHECK THIS ONE CAREFULLY
+            console.log("Hot Drinks:", hotDrinks);   // <--- CHECK THIS ONE CAREFULLY
+            console.log("--- End Data Status ---");
+
+            
         } catch (error: any) {
             console.error('Error fetching menu data:', error);
             errorMessage = `Failed to load menu: ${error.message}. Please ensure the Google Sheet is published correctly.`;
