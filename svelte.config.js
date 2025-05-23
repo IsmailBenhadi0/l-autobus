@@ -1,20 +1,20 @@
+// svelte.config.js
 import adapter from '@sveltejs/adapter-static';
-// CHANGE THIS LINE:
-import preprocess from 'svelte-preprocess'; // <-- Import directly from 'svelte-preprocess'
+import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    // Use `preprocess` directly here, it's configured for Vite internally
-    preprocess: preprocess(), // <--- No longer `vitePreprocess()`
+    preprocess: preprocess(),
     kit: {
         adapter: adapter({
             pages: 'build',
             assets: 'build',
-            fallback: undefined,
+            fallback: undefined, // Or you could set 'fallback: "404.html"' for a custom 404 page
             precompress: false,
             strict: true
         }),
         paths: {
+            // THIS MUST MATCH YOUR REPOSITORY NAME EXACTLY, prefixed with a slash
             base: process.env.NODE_ENV === 'production' ? '/l-autobus' : '',
         }
     }
