@@ -1,0 +1,49 @@
+# .github/workflows/deploy.yml
+name: Deploy SvelteKit to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # This workflow runs when you push to the 'main' branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # The type of runner that the job will run on
+
+    permissions:
+      contents: write # Needed to push the build output to gh-pages branch or docs folder
+      pages: write # Needed to deploy to GitHub Pages
+      id-token: write # Needed for OpenID Connect (OIDC) authentication for GitHub Pages
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Checks out your repository under $GITHUB_WORKSPACE
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Use Node.js version 20 or higher
+
+      - name: Install dependencies
+        run: npm install # Installs your project's dependencies
+
+      - name: Build SvelteKit project
+        run: npm run build # Runs your SvelteKit build command
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # Action specifically designed for deploying to GH Pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # GitHub's automatically provided token
+          publish_dir: ./build # The directory that should be deployed (your SvelteKit build output)
+          publish_branch: gh-pages # This action can also deploy to a gh-pages branch.
+                                  # But since you're using /docs on main, this might be simpler.
+                                  # Alternative for /docs on main:
+                                  # cname: 'your-custom-domain.com' # Optional if you have a custom domain
+                                  # This action also automatically creates a .nojekyll file.
+                                  # It has a mode to publish to the root of the main branch for user pages,
+                                  # or to a docs folder. Let's use the simplest for project page:
+                                  # Set the 'destination_dir' to 'docs' if you want it in the docs folder on main.
+                                  # Default is to publish to gh-pages branch.
+                                  # For your setup (docs folder on main):
+                                  destination_dir: docs
+                                  allow_empty_commit: true
