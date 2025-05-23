@@ -97,39 +97,44 @@ export async function getAllMenuItems(): Promise<DrinkType[]> {
 
 // Example of how you'd get categories from the single source:
 // (You could even define these directly in +page.svelte if you prefer)
+export async function getSoftDrinks(): Promise<DrinkType[]> {
+    const allItems = await getAllMenuItems();
+    return allItems.filter(item => item.category?.trim() === 'Soft Drinks'); // <--- ADDED .trim()
+}
+
+// Apply this to other category filters as well for consistency and robustness:
 export async function getCocktails(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Cocktails');
+    return allItems.filter(item => item.category?.trim() === 'Cocktails');
 }
 
 export async function getNonAlcoholicCocktails(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Non-Alcoholic Cocktails');
+    return allItems.filter(item => item.category?.trim() === 'Non-Alcoholic Cocktails');
 }
 
 export async function getBeersOnTap(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Beers on Tap');
+    return allItems.filter(item => item.category?.trim() === 'Beers on Tap');
 }
 
 export async function getBottledBeers(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Bottled Beers');
+    return allItems.filter(item => item.category?.trim() === 'Bottled Beers');
 }
 
-export async function getWines(): Promise<DrinkType[]> { // <--- Changed from WineType[]
+export async function getWines(): Promise<DrinkType[]> { // Keep WineType for specific properties
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category.includes('Wine'));
-}
-
-export async function getSoftDrinks(): Promise<DrinkType[]> {
-    const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Soft Drinks');
+    // For wines, if you have categories like "White Wine", "Red Wine", "Rosé Wine",
+    // 'includes("Wine")' is still a good approach, but trim the source:
+    return allItems.filter((item): item is DrinkType => item.category?.trim().includes('Wine'));
+    // Or if you filter by exact wine categories like "White Wine":
+    // return allItems.filter(item => item.category?.trim() === 'White Wine');
 }
 
 export async function getHotDrinks(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
-    return allItems.filter(item => item.category === 'Hot Drinks');
+    return allItems.filter(item => item.category?.trim() === 'Hot Drinks');
 }
 
 // Remove getContactInfo function and ContactInfo interface
