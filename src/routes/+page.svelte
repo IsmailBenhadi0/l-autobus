@@ -90,6 +90,18 @@
                 </li>
             {/each}
         </ul>
+         <h2>Softs</h2>
+        <ul>
+            {#each hotDrinks as item (item.id)}
+                <li>
+                    <div>
+                        <span class="item-name">{item.name}</span>
+                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
+                    </div>
+                    <span class="item-price">${item.price.toFixed(2)}</span>
+                </li>
+            {/each}
+        </ul>
     </div>
 
     <div class="menu-section contact-info">
