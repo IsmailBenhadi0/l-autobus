@@ -1,3 +1,5 @@
+// src/lib/data.ts
+
 import Papa from 'papaparse';
 
 // Define the structure of your menu items, matching your Google Sheet columns
@@ -18,7 +20,7 @@ export interface DrinkType {
 // --- IMPORTANT: PASTE YOUR SINGLE FULL MENU CSV URL HERE ---
 // Get this URL from your Google Sheet: File > Share > Publish to web,
 // then select your specific menu tab, choose "Comma-separated values (.csv)", and copy the generated URL.
-const FULL_MENU_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT8mHeQpE95y_GYAjjvNuNQ9qnM84YVEuqpXrZ44Xy0IZVF2VojQNFAZQknQbCpMwm3w5l_VoGfJrZC/pub?gid=1240253638&single=true&output=csv';
+const FULL_MENU_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT8mHeQpE95y_GYAjjvNuNQ9qnM84YVEuqpXrZ44Xy0IZVF2VojQNFAZQknQbCpMwm3w5l_VoGfJrZC/pub?gid=1240253638&single=true&output=csv'; // REMEMBER TO REPLACE THIS
 
 // Function to fetch and parse the CSV data
 async function fetchCsvData(): Promise<DrinkType[]> {
@@ -34,8 +36,6 @@ async function fetchCsvData(): Promise<DrinkType[]> {
                 header: true, // Use first row as column headers
                 skipEmptyLines: true,
                 dynamicTyping: (field) => {
-                    // Automatically convert 'id' and 'price' to numbers
-                    // Automatically convert 'new', 'byGlass', 'byBottle' to booleans
                     if (field === 'id' || field === 'price') return true;
                     if (field === 'new' || field === 'byGlass' || field === 'byBottle') return true;
                     return false;
@@ -48,25 +48,24 @@ async function fetchCsvData(): Promise<DrinkType[]> {
                     }
 
                     const processedData = results.data.map(row => {
-                        // Ensure 'row' is a valid object before spreading
                         if (row === null || typeof row !== 'object' || Array.isArray(row)) {
-                            console.warn('Skipping invalid row:', row);
+                            console.warn('Skipping invalid row during CSV processing:', row);
                             return null;
                         }
 
                         const processedRow = { ...row } as any;
                         
-                        // Explicitly convert "TRUE"/"FALSE" strings (from dynamicTyping) to actual booleans
-                        // This handles cases where dynamicTyping might not perfectly convert on all systems
                         if (typeof processedRow.new === 'string') processedRow.new = processedRow.new.toLowerCase() === 'true';
                         if (typeof processedRow.byGlass === 'string') processedRow.byGlass = processedRow.byGlass.toLowerCase() === 'true';
                         if (typeof processedRow.byBottle === 'string') processedRow.byBottle = processedRow.byBottle.toLowerCase() === 'true';
 
-                        // Filter out rows that might have missing 'name' or 'id' (e.g., partial blank rows)
                         if (!processedRow.name || processedRow.id === undefined || processedRow.id === null) return null;
 
                         return processedRow as DrinkType;
-                    }).filter(item => item !== null) as DrinkType[]; // Remove nulls from the array
+                    }).filter(item => item !== null) as DrinkType[];
+
+                    // --- DEBUG LOG: See the raw data after parsing ---
+                    console.log("Raw processed data from CSV (in data.ts):", processedData);
 
                     resolve(processedData);
                 },
@@ -87,6 +86,7 @@ export async function getAllMenuItems(): Promise<DrinkType[]> {
 }
 
 // Helper functions to filter items by category (used by load function)
+// All filters now include .trim() for robustness against whitespace
 export async function getCocktails(): Promise<DrinkType[]> {
     const allItems = await getAllMenuItems();
     return allItems.filter(item => item.category?.trim() === 'Cocktails');
@@ -102,6 +102,14 @@ export async function getHotDrinks(): Promise<DrinkType[]> {
     return allItems.filter(item => item.category?.trim() === 'Hot Drinks');
 }
 
-// You can add more get...() functions here for other categories you want to display
-// e.g., getBeersOnTap, getBottledBeers, getWines, getNonAlcoholicCocktails
-// Make sure their category strings match your Google Sheet exactly.
+// You can add more getters here if you add more categories to +page.svelte
+// Remember to adjust their filter strings to exactly match your Google Sheet category names.
+// Example:
+// export async function getBeersOnTap(): Promise<DrinkType[]> {
+//     const allItems = await getAllMenuItems();
+//     return allItems.filter(item => item.category?.trim() === 'Beers on Tap');
+// }
+// export async function getWines(): Promise<DrinkType[]> {
+//     const allItems = await getAllMenuItems();
+//     return allItems.filter(item => item.category?.trim().includes('Wine')); // Using includes for all wine types
+// }
