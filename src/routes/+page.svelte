@@ -56,7 +56,7 @@
             console.log("Hot Drinks:", hotDrinks);   // <--- CHECK THIS ONE CAREFULLY
             console.log("--- End Data Status ---");
 
-            
+
         } catch (error: any) {
             console.error('Error fetching menu data:', error);
             errorMessage = `Failed to load menu: ${error.message}. Please ensure the Google Sheet is published correctly.`;
@@ -75,7 +75,7 @@
 {:else if isLoading}
     <p class="loading">Loading menu from Google Sheets...</p>
 {:else}
-    <h1>Our Bar Menu</h1>
+    <h1>MENUUUUUUUUU</h1>
 
     <div class="menu-section">
         <h2>Cocktails</h2>
