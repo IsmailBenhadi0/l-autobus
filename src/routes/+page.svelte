@@ -45,7 +45,7 @@
 {#if error}
     <p class="error">{error}</p>
 {:else}
-    <h1>Our Bar Menu</h1> 
+    <h1>AUTOBUS Bar Menu</h1> 
 
     <div class="menu-section">
         <h2>Cocktails</h2>
