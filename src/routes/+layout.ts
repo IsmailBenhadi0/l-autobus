@@ -1,4 +1,4 @@
 // src/routes/+layout.ts
 
-// Set prerender to true for all pages in this layout
+// This tells SvelteKit to prerender all pages that use this layout (which is default for all pages)
 export const prerender = true;

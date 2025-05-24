@@ -1,19 +1,14 @@
 <script lang="ts">
-    // Import only the DrinkType type from your data library
+    // Import only the DrinkType type
     import type { DrinkType } from '$lib/data';
 
     // Declare props that will be passed from the load function in +page.ts
-    // The 'export let' makes these properties accessible as props.
     export let cocktails: DrinkType[];
-    export let nonAlcoholicCocktails: DrinkType[];
-    export let beersOnTap: DrinkType[];
-    export let bottledBeers: DrinkType[];
-    export let wines: DrinkType[];
     export let softDrinks: DrinkType[];
     export let hotDrinks: DrinkType[];
     export let error: string | undefined; // Prop to receive error message if load failed
 
-    // Hardcode contact info directly in the component (this part remains unchanged)
+    // Hardcode contact info directly in the component
     const contactInfo = {
         name: "CAFE L'AUTOBUS",
         address: "PLACE FLAGEY 28",
@@ -26,13 +21,20 @@
         },
         happyHour: "4:00 PM - 7:00 PM Daily",
     };
-
-    // REMOVE THE ENTIRE onMount BLOCK from this file.
-    // REMOVE 'isLoading' and 'errorMessage' variables.
 </script>
 
 <style>
-    /* ... (your existing CSS styles remain the same) ... */
+    /* Add some basic styles */
+    body { font-family: sans-serif; margin: 2em; line-height: 1.6; }
+    h1, h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 0.5em; margin-top: 1.5em; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 0.5em; padding: 0.5em 0; display: flex; justify-content: space-between; align-items: flex-start;}
+    .item-name { font-weight: bold; flex-grow: 1; }
+    .item-price { margin-left: 1em; white-space: nowrap; }
+    .item-description { font-size: 0.9em; color: #666; margin-top: 0.2em; flex-basis: 100%; }
+    .error { color: red; font-weight: bold; }
+    .menu-section { margin-bottom: 2em; }
+    .contact-info p { margin: 0.2em 0; }
 </style>
 
 {#if error}
@@ -54,58 +56,6 @@
             {/each}
         </ul>
         
-        <h2>Non-Alcoholic Cocktails</h2>
-        <ul>
-            {#each nonAlcoholicCocktails as item (item.id)}
-                <li>
-                    <div>
-                        <span class="item-name">{item.name}</span>
-                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
-                    </div>
-                    <span class="item-price">${item.price.toFixed(2)}</span>
-                </li>
-            {/each}
-        </ul>
-
-        <h2>Beers on Tap</h2>
-        <ul>
-            {#each beersOnTap as item (item.id)}
-                <li>
-                    <div>
-                        <span class="item-name">{item.name}</span> {item.size ? `(${item.size})` : ''}
-                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
-                    </div>
-                    <span class="item-price">${item.price.toFixed(2)}</span>
-                </li>
-            {/each}
-        </ul>
-
-        <h2>Bottled Beers</h2>
-        <ul>
-            {#each bottledBeers as item (item.id)}
-                <li>
-                    <div>
-                        <span class="item-name">{item.name}</span> {item.size ? `(${item.size})` : ''}
-                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
-                    </div>
-                    <span class="item-price">${item.price.toFixed(2)}</span>
-                </li>
-            {/each}
-        </ul>
-
-        <h2>Wines</h2>
-        <ul>
-            {#each wines as item (item.id)}
-                <li>
-                    <div>
-                        <span class="item-name">{item.name}</span> ({item.type} {item.byGlass ? 'Glass' : ''}{item.byBottle ? 'Bottle' : ''})
-                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
-                    </div>
-                    <span class="item-price">${item.price.toFixed(2)}</span>
-                </li>
-            {/each}
-        </ul>
-
         <h2>Soft Drinks</h2>
         <ul>
             {#each softDrinks as item (item.id)}
@@ -131,7 +81,6 @@
                 </li>
             {/each}
         </ul>
-
     </div>
 
     <div class="menu-section contact-info">
