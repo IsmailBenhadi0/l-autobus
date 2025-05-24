@@ -20,7 +20,7 @@ export interface DrinkType {
 // --- IMPORTANT: PASTE YOUR SINGLE FULL MENU CSV URL HERE ---
 // Get this URL from your Google Sheet: File > Share > Publish to web,
 // then select your specific menu tab, choose "Comma-separated values (.csv)", and copy the generated URL.
-const FULL_MENU_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT8mHeQpE95y_GYAjjvNuNQ9qnM84YVEuqpXrZ44Xy0IZVF2VojQNFAZQknQbCpMwm3w5l_VoGfJrZC/pub?gid=1240253638&single=true&output=csv'; // REMEMBER TO REPLACE THIS
+const FULL_MENU_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRusInzox0NKiitqv9er7JAZ4lH64YyIF8o8N9YMUk52L2zJ6E61fXTkpeiUUt98MLWOJRdFdwTRvuu/pub?gid=1240253638&single=true&output=csv'; // REMEMBER TO REPLACE THIS
 
 // Function to fetch and parse the CSV data
 async function fetchCsvData(): Promise<DrinkType[]> {
