@@ -1,12 +1,9 @@
 <script lang="ts">
-    // Remove the individual get functions here, data will come from props
-    // import { getCocktails, getNonAlcoholicCocktails, getBeersOnTap, ... }
-    
-    // Import only the DrinkType type from $lib/data
+    // Import only the DrinkType type from your data library
     import type { DrinkType } from '$lib/data';
 
-    // Declare variables to receive data as PROPS from the load function
-    // The 'export let' makes them props
+    // Declare props that will be passed from the load function in +page.ts
+    // The 'export let' makes these properties accessible as props.
     export let cocktails: DrinkType[];
     export let nonAlcoholicCocktails: DrinkType[];
     export let beersOnTap: DrinkType[];
@@ -14,9 +11,9 @@
     export let wines: DrinkType[];
     export let softDrinks: DrinkType[];
     export let hotDrinks: DrinkType[];
-    export let error: string | undefined; // To display error message if load fails
+    export let error: string | undefined; // Prop to receive error message if load failed
 
-    // Hardcode contact info directly in the component (this remains the same)
+    // Hardcode contact info directly in the component (this part remains unchanged)
     const contactInfo = {
         name: "CAFE L'AUTOBUS",
         address: "PLACE FLAGEY 28",
@@ -30,12 +27,8 @@
         happyHour: "4:00 PM - 7:00 PM Daily",
     };
 
-    // REMOVE THE ENTIRE onMount BLOCK. It will no longer be used for data fetching.
-    // onMount(async () => { /* ... */ });
-
-    // Remove isLoading and errorMessage variables from here too.
-    // The loading/error state will be handled by the presence of `error` prop
-    // and the initial HTML content (if error, show error; otherwise, show content).
+    // REMOVE THE ENTIRE onMount BLOCK from this file.
+    // REMOVE 'isLoading' and 'errorMessage' variables.
 </script>
 
 <style>
@@ -45,7 +38,7 @@
 {#if error}
     <p class="error">{error}</p>
 {:else}
-    <h1>AUTOBUS Bar Menu</h1> 
+    <h1>Our Bar Menu</h1>
 
     <div class="menu-section">
         <h2>Cocktails</h2>
@@ -61,7 +54,59 @@
             {/each}
         </ul>
         
-        <h2>Soft Drinks</h2> 
+        <h2>Non-Alcoholic Cocktails</h2>
+        <ul>
+            {#each nonAlcoholicCocktails as item (item.id)}
+                <li>
+                    <div>
+                        <span class="item-name">{item.name}</span>
+                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
+                    </div>
+                    <span class="item-price">${item.price.toFixed(2)}</span>
+                </li>
+            {/each}
+        </ul>
+
+        <h2>Beers on Tap</h2>
+        <ul>
+            {#each beersOnTap as item (item.id)}
+                <li>
+                    <div>
+                        <span class="item-name">{item.name}</span> {item.size ? `(${item.size})` : ''}
+                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
+                    </div>
+                    <span class="item-price">${item.price.toFixed(2)}</span>
+                </li>
+            {/each}
+        </ul>
+
+        <h2>Bottled Beers</h2>
+        <ul>
+            {#each bottledBeers as item (item.id)}
+                <li>
+                    <div>
+                        <span class="item-name">{item.name}</span> {item.size ? `(${item.size})` : ''}
+                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
+                    </div>
+                    <span class="item-price">${item.price.toFixed(2)}</span>
+                </li>
+            {/each}
+        </ul>
+
+        <h2>Wines</h2>
+        <ul>
+            {#each wines as item (item.id)}
+                <li>
+                    <div>
+                        <span class="item-name">{item.name}</span> ({item.type} {item.byGlass ? 'Glass' : ''}{item.byBottle ? 'Bottle' : ''})
+                        {#if item.description}<p class="item-description">{item.description}</p>{/if}
+                    </div>
+                    <span class="item-price">${item.price.toFixed(2)}</span>
+                </li>
+            {/each}
+        </ul>
+
+        <h2>Soft Drinks</h2>
         <ul>
             {#each softDrinks as item (item.id)}
                 <li>
@@ -73,8 +118,8 @@
                 </li>
             {/each}
         </ul>
-        
-        <h2>Hot Drinks</h2> 
+
+        <h2>Hot Drinks</h2>
         <ul>
             {#each hotDrinks as item (item.id)}
                 <li>
@@ -87,7 +132,7 @@
             {/each}
         </ul>
 
-        </div>
+    </div>
 
     <div class="menu-section contact-info">
         <h2>Contact & Hours</h2>
