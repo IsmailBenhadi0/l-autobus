@@ -1,26 +1,22 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import {
-        getCocktails, getNonAlcoholicCocktails, getBeersOnTap, // These now filter from combined data
-        getBottledBeers, getWines, getSoftDrinks, getHotDrinks,
-        type DrinkType,
-    } from '$lib/data';
+    // Remove the individual get functions here, data will come from props
+    // import { getCocktails, getNonAlcoholicCocktails, getBeersOnTap, ... }
+    
+    // Import only the DrinkType type from $lib/data
+    import type { DrinkType } from '$lib/data';
 
-    // No need for ContactInfo type as it's hardcoded
-    // type ContactInfo
+    // Declare variables to receive data as PROPS from the load function
+    // The 'export let' makes them props
+    export let cocktails: DrinkType[];
+    export let nonAlcoholicCocktails: DrinkType[];
+    export let beersOnTap: DrinkType[];
+    export let bottledBeers: DrinkType[];
+    export let wines: DrinkType[];
+    export let softDrinks: DrinkType[];
+    export let hotDrinks: DrinkType[];
+    export let error: string | undefined; // To display error message if load fails
 
-    // Declare variables to hold your fetched data
-    let cocktails: DrinkType[] = [];
-    let nonAlcoholicCocktails: DrinkType[] = [];
-    let beersOnTap: DrinkType[] = [];
-    let bottledBeers: DrinkType[] = [];
-    let wines: DrinkType[] = [];
-    let softDrinks: DrinkType[] = [];
-    let hotDrinks: DrinkType[] = [];
-    let errorMessage: string | null = null;
-    let isLoading = true;
-
-    // Hardcode contact info directly in the component
+    // Hardcode contact info directly in the component (this remains the same)
     const contactInfo = {
         name: "CAFE L'AUTOBUS",
         address: "PLACE FLAGEY 28",
@@ -34,48 +30,22 @@
         happyHour: "4:00 PM - 7:00 PM Daily",
     };
 
-    onMount(async () => {
-        try {
-            // Fetch all data categories concurrently for efficiency
-            // These functions will now internally call getAllMenuItems() and filter.
-            [
-                cocktails, nonAlcoholicCocktails, beersOnTap,
-                bottledBeers, wines, softDrinks, hotDrinks
-            ] = await Promise.all([
-                getCocktails(), getNonAlcoholicCocktails(), getBeersOnTap(),
-                getBottledBeers(), getWines(), getSoftDrinks(), getHotDrinks()
-            ]);
+    // REMOVE THE ENTIRE onMount BLOCK. It will no longer be used for data fetching.
+    // onMount(async () => { /* ... */ });
 
-              console.log("--- Menu Data Status ---");
-            console.log("Cocktails:", cocktails);
-            console.log("Non-Alcoholic Cocktails:", nonAlcoholicCocktails);
-            console.log("Beers on Tap:", beersOnTap);
-            console.log("Bottled Beers:", bottledBeers);
-            console.log("Wines:", wines);
-            console.log("Soft Drinks:", softDrinks); // <--- CHECK THIS ONE CAREFULLY
-            console.log("Hot Drinks:", hotDrinks);   // <--- CHECK THIS ONE CAREFULLY
-            console.log("--- End Data Status ---");
-
-
-        } catch (error: any) {
-            console.error('Error fetching menu data:', error);
-            errorMessage = `Failed to load menu: ${error.message}. Please ensure the Google Sheet is published correctly.`;
-        } finally {
-            isLoading = false;
-        }
-    });
+    // Remove isLoading and errorMessage variables from here too.
+    // The loading/error state will be handled by the presence of `error` prop
+    // and the initial HTML content (if error, show error; otherwise, show content).
 </script>
 
 <style>
     /* ... (your existing CSS styles remain the same) ... */
 </style>
 
-{#if errorMessage}
-    <p class="error">{errorMessage}</p>
-{:else if isLoading}
-    <p class="loading">Loading menu from Google Sheets...</p>
+{#if error}
+    <p class="error">{error}</p>
 {:else}
-    <h1>MENUUUUUUUUU</h1>
+    <h1>Our Bar Menu</h1> 
 
     <div class="menu-section">
         <h2>Cocktails</h2>
@@ -90,7 +60,8 @@
                 </li>
             {/each}
         </ul>
-         <h2>Softs</h2>
+        
+        <h2>Soft Drinks</h2> 
         <ul>
             {#each softDrinks as item (item.id)}
                 <li>
@@ -102,7 +73,8 @@
                 </li>
             {/each}
         </ul>
-         <h2>Softs</h2>
+        
+        <h2>Hot Drinks</h2> 
         <ul>
             {#each hotDrinks as item (item.id)}
                 <li>
@@ -114,7 +86,8 @@
                 </li>
             {/each}
         </ul>
-    </div>
+
+        </div>
 
     <div class="menu-section contact-info">
         <h2>Contact & Hours</h2>
